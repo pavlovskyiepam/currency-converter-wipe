@@ -243,6 +243,7 @@ body {
   background-color: #252525;
   border-radius: 10px;
   padding: 1.5rem;
+  min-height: 370px; /* Adjust based on your content */
 }
 
 .exchange-chart h3 {
@@ -363,4 +364,88 @@ body {
     flex-direction: column;
     gap: 0.25rem;
   }
+}
+
+/* Skeleton UI Styles */
+.skeleton {
+  position: relative;
+}
+
+.skeleton-text {
+  display: inline-block;
+  height: 1.2em;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: shine 1.5s infinite;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+/* Specific widths for different types of skeleton elements */
+.skeleton-text.currency-rate {
+  width: 80px;  /* Adjust to match typical exchange rate width */
+}
+
+.skeleton-text.amount {
+  width: 70px;  /* Adjust to match typical amount width */
+}
+
+.skeleton-text.fee {
+  width: 20px;  /* Adjust to match typical fee percentage width */
+}
+
+.skeleton .detail-row .skeleton-text {
+  display: inline-block;
+}
+
+.chart-skeleton {
+  height: 300px;
+  position: relative;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chart-placeholder {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 15%;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: shine 1.5s infinite;
+  border-radius: 4px;
+}
+
+.axis-placeholder {
+  position: absolute;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: shine 1.5s infinite;
+  border-radius: 4px;
+}
+
+.x-axis {
+  height: 2px;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+}
+
+.y-axis {
+  width: 2px;
+  left: 10%;
+  top: 10%;
+  bottom: 15%;
+}
+
+@keyframes shine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fixed height containers to prevent layout shifts */
+.result-container {
+  min-height: 250px; /* Adjust based on your content */
 }

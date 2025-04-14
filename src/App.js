@@ -7,7 +7,8 @@ import SwapButton from './components/SwapButton';
 import ConversionResult from './components/ConversionResult';
 import ExchangeChart from './components/ExchangeChart';
 import TimeRangeSelector from './components/TimeRangeSelector';
-import Loader from './components/Loader';
+import ResultSkeleton from './components/ResultSkeleton';
+import ChartSkeleton from './components/ChartSkeleton';
 import { predefinedCurrencies, getExchangeRate, getHistoricalRates } from './services/currencyService';
 
 function App() {
@@ -20,7 +21,6 @@ function App() {
   const [rate, setRate] = useState(0);
   const [historicalData, setHistoricalData] = useState([]);
   const [timeRange, setTimeRange] = useState(5);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [isCurrentRateLoading, setIsCurrentRateLoading] = useState(true);
   const [isHistoricalDataLoading, setIsHistoricalDataLoading] = useState(true);
@@ -69,16 +69,20 @@ function App() {
     fetchHistoricalData();
   }, [fromCurrency, toCurrency, timeRange]);
 
-  // Set overall loading state based on both loading states
-  useEffect(() => {
-    setIsLoading(isCurrentRateLoading || isHistoricalDataLoading);
-  }, [isCurrentRateLoading, isHistoricalDataLoading]);
-
   // Handler for currency swap
   const handleSwapCurrencies = () => {
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
   };
+
+  // Create a modified ResultSkeleton that accepts the current currencies
+  const CurrencyAwareResultSkeleton = () => (
+    <ResultSkeleton
+      fromCurrency={fromCurrency}
+      toCurrency={toCurrency}
+      fee={fee}
+    />
+  );
 
   return (
     <div className="App">
@@ -121,32 +125,38 @@ function App() {
             />
           </div>
 
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <div className="results-section">
-              <ConversionResult
-                fromCurrency={fromCurrency}
-                toCurrency={toCurrency}
-                amount={amount}
-                rate={rate}
-                fee={fee}
-              />
-
-              <div className="chart-section">
-                <TimeRangeSelector
-                  selectedRange={timeRange}
-                  onRangeChange={setTimeRange}
+          <div className="results-section">
+            <div className="result-container">
+              {isCurrentRateLoading ? (
+                <CurrencyAwareResultSkeleton />
+              ) : (
+                <ConversionResult
+                  fromCurrency={fromCurrency}
+                  toCurrency={toCurrency}
+                  amount={amount}
+                  rate={rate}
+                  fee={fee}
                 />
-                
+              )}
+            </div>
+
+            <div className="chart-section">
+              <TimeRangeSelector
+                selectedRange={timeRange}
+                onRangeChange={setTimeRange}
+              />
+              
+              {isHistoricalDataLoading ? (
+                <ChartSkeleton />
+              ) : (
                 <ExchangeChart
                   data={historicalData}
                   fromCurrency={fromCurrency}
                   toCurrency={toCurrency}
                 />
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </main>
 
