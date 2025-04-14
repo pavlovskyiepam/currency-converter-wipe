@@ -11,7 +11,7 @@ import Loader from './components/Loader';
 import { predefinedCurrencies, getExchangeRate, getHistoricalRates } from './services/currencyService';
 
 function App() {
-  // State variables
+  // State variables 
   const [currencies] = useState(predefinedCurrencies);
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('BRL');
@@ -22,33 +22,57 @@ function App() {
   const [timeRange, setTimeRange] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isCurrentRateLoading, setIsCurrentRateLoading] = useState(true);
+  const [isHistoricalDataLoading, setIsHistoricalDataLoading] = useState(true);
 
-  // Fetch exchange rate when currencies or time range change
+  // Fetch current exchange rate only when currencies change
   useEffect(() => {
-    const fetchExchangeData = async () => {
+    const fetchCurrentRate = async () => {
       if (!fromCurrency || !toCurrency) return;
 
-      setIsLoading(true);
+      setIsCurrentRateLoading(true);
       try {
         // Get current exchange rate
         const currentRate = await getExchangeRate(fromCurrency, toCurrency);
         setRate(currentRate);
-
-        // Get historical data
-        const historical = await getHistoricalRates(fromCurrency, toCurrency, timeRange);
-        setHistoricalData(historical);
-
         setError('');
       } catch (error) {
-        setError('Failed to fetch exchange rate data. Please try again later.');
-        console.error('Error fetching exchange data:', error);
+        setError('Failed to fetch current exchange rate. Please try again later.');
+        console.error('Error fetching current rate:', error);
       } finally {
-        setIsLoading(false);
+        setIsCurrentRateLoading(false);
       }
     };
 
-    fetchExchangeData();
+    fetchCurrentRate();
+  }, [fromCurrency, toCurrency]);
+
+  // Fetch historical data when currencies or time range change
+  useEffect(() => {
+    const fetchHistoricalData = async () => {
+      if (!fromCurrency || !toCurrency) return;
+
+      setIsHistoricalDataLoading(true);
+      try {
+        // Get historical data
+        const historical = await getHistoricalRates(fromCurrency, toCurrency, timeRange);
+        setHistoricalData(historical);
+        setError('');
+      } catch (error) {
+        setError('Failed to fetch historical data. Please try again later.');
+        console.error('Error fetching historical data:', error);
+      } finally {
+        setIsHistoricalDataLoading(false);
+      }
+    };
+
+    fetchHistoricalData();
   }, [fromCurrency, toCurrency, timeRange]);
+
+  // Set overall loading state based on both loading states
+  useEffect(() => {
+    setIsLoading(isCurrentRateLoading || isHistoricalDataLoading);
+  }, [isCurrentRateLoading, isHistoricalDataLoading]);
 
   // Handler for currency swap
   const handleSwapCurrencies = () => {
