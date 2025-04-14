@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import CurrencyDropdown from './components/CurrencyDropdown';
-import AmountInput from './components/AmountInput';
-import FeeInput from './components/FeeInput';
-import SwapButton from './components/SwapButton';
-import ConversionResult from './components/ConversionResult';
-import ExchangeChart from './components/ExchangeChart';
-import TimeRangeSelector from './components/TimeRangeSelector';
-import ResultSkeleton from './components/ResultSkeleton';
-import ChartSkeleton from './components/ChartSkeleton';
-import { predefinedCurrencies, getExchangeRate, getHistoricalRates } from './services/currencyService';
+import CurrencyDropdown from './components/CurrencyDropdown/CurrencyDropdown';
+import AmountInput from './components/AmountInput/AmountInput';
+import FeeInput from './components/FeeInput/FeeInput';
+import SwapButton from './components/SwapButton/SwapButton';
+import ConversionResult from './components/ConversionResult/ConversionResult';
+import ExchangeChart from './components/ExchangeChart/ExchangeChart';
+import TimeRangeSelector from './components/TimeRangeSelector/TimeRangeSelector';
+import ResultSkeleton from './components/ResultSkeleton/ResultSkeleton';
+import ChartSkeleton from './components/ChartSkeleton/ChartSkeleton';
+import { predefinedCurrencies, getExchangeRate, getHistoricalRates } from './services/currency/currencyService';
 
 function App() {
   // State variables 
