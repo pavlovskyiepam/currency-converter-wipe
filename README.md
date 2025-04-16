@@ -12,15 +12,17 @@ A responsive currency converter web application built with React that allows rea
 - View the real-time conversion rate and final amount (after fee)
 - View a line chart showing exchange rate history for the past 5 days or 1 month
 - Swap source and target currencies with a button click
+- Loading skeletons for a better user experience during API requests
+- Error handling for API request failures
 - Responsive design that works on mobile and desktop
 - Dark-themed UI
 
 ## Tech Stack
 
-- React (with functional components and hooks)
+- React 19.1.0 (with functional components and hooks)
 - JavaScript ES6+
-- Axios for API requests
-- Recharts for historical data visualization
+- Axios 1.8.4 for API requests
+- Recharts 2.15.2 for historical data visualization
 - CSS for styling
 
 ## Getting Started
@@ -39,7 +41,7 @@ git clone <repository-url>
 
 2. Navigate to the project directory
 ```
-cd currency-converter
+cd currency-converter-wipe
 ```
 
 3. Install dependencies
@@ -73,26 +75,45 @@ npm start
 
 ```
 src/
-├── components/           # Reusable UI components
-│   ├── AmountInput.js    # Input for the amount to convert
-│   ├── ConversionResult.js # Display of conversion results
-│   ├── CurrencyDropdown.js # Dropdown for currency selection
-│   ├── ExchangeChart.js  # Chart for historical exchange rates
-│   ├── FeeInput.js       # Input for the conversion fee
-│   ├── Loader.js         # Loading indicator component
-│   ├── SwapButton.js     # Button to swap currencies
-│   └── TimeRangeSelector.js # Selector for historical data range
-├── services/             # API services
-│   └── currencyService.js # Currency Beacon API service
-├── assets/               # Static assets like images
-├── App.js                # Main application component
-├── App.css               # Main application styles
-└── index.js              # Application entry point
+├── components/                # Reusable UI components
+│   ├── AmountInput/           # Input for the amount to convert
+│   ├── ChartSkeleton/         # Loading skeleton for the chart
+│   ├── ConversionResult/      # Display of conversion results
+│   ├── CurrencyDropdown/      # Dropdown for currency selection
+│   ├── ExchangeChart/         # Chart for historical exchange rates
+│   ├── FeeInput/              # Input for the conversion fee
+│   ├── Loader/                # Loading indicator component
+│   ├── ResultSkeleton/        # Loading skeleton for results
+│   ├── SwapButton/            # Button to swap currencies
+│   └── TimeRangeSelector/     # Selector for historical data range
+├── services/                  # API services
+│   └── currency/              # Currency Beacon API service
+│       └── currencyService.js # Service for currency operations
+├── assets/                    # Static assets like images
+├── App.js                     # Main application component
+├── App.css                    # Main application styles
+└── index.js                   # Application entry point
 ```
 
-## API Reference
+## API Integration
 
-This application uses the Currency Beacon API for real-time and historical exchange rate data.
+This application uses the Currency Beacon API for real-time and historical exchange rate data:
+
+- `/latest` endpoint for current exchange rates
+- `/timeseries` endpoint for historical exchange rate data
+
+The application currently supports a predefined list of currencies:
+- EUR (Euro)
+- USD (US Dollar)
+- BRL (Brazilian Real)
+- UAH (Ukrainian Hryvnia)
+
+## Error Handling
+
+The application includes error handling for API requests:
+- Displays user-friendly error messages
+- Implements loading states with skeleton components
+- Logs detailed errors to the console for debugging
 
 ## License
 
