@@ -38,7 +38,10 @@ function App() {
         setError('');
       } catch (error) {
         setError('Failed to fetch current exchange rate. Please try again later.');
-        console.error('Error fetching current rate:', error);
+        // Modify this line to prevent the error from logging to console in tests
+        if (process.env.NODE_ENV !== 'test') {
+          console.error('Error fetching current rate:', error);
+        }
       } finally {
         setIsCurrentRateLoading(false);
       }
@@ -60,7 +63,10 @@ function App() {
         setError('');
       } catch (error) {
         setError('Failed to fetch historical data. Please try again later.');
-        console.error('Error fetching historical data:', error);
+        // Modify this line to prevent the error from logging to console in tests
+        if (process.env.NODE_ENV !== 'test') {
+          console.error('Error fetching historical data:', error);
+        }
       } finally {
         setIsHistoricalDataLoading(false);
       }
@@ -91,7 +97,24 @@ function App() {
       </header>
 
       <main className="converter-container">
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="error-message">
+            {error}
+            <button 
+              className="retry-button" 
+              onClick={() => {
+                // Clear error
+                setError('');
+                
+                // Trigger re-fetching by setting loading states
+                setIsCurrentRateLoading(true);
+                setIsHistoricalDataLoading(true);
+              }}
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         <div className="converter-form">
           <div className="currency-selection">
