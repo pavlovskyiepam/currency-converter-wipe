@@ -25,6 +25,14 @@ function App() {
   const [isCurrentRateLoading, setIsCurrentRateLoading] = useState(true);
   const [isHistoricalDataLoading, setIsHistoricalDataLoading] = useState(true);
 
+  // Reusable error handler
+  const handleError = (message, error) => {
+    setError(message);
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(message, error);
+    }
+  };
+
   // Fetch current exchange rate only when currencies change
   useEffect(() => {
     const fetchCurrentRate = async () => {
@@ -37,11 +45,7 @@ function App() {
         setRate(currentRate);
         setError('');
       } catch (error) {
-        setError('Failed to fetch current exchange rate. Please try again later.');
-        // Modify this line to prevent the error from logging to console in tests
-        if (process.env.NODE_ENV !== 'test') {
-          console.error('Error fetching current rate:', error);
-        }
+        handleError('Failed to fetch current exchange rate. Please try again later.', error);
       } finally {
         setIsCurrentRateLoading(false);
       }
@@ -62,11 +66,7 @@ function App() {
         setHistoricalData(historical);
         setError('');
       } catch (error) {
-        setError('Failed to fetch historical data. Please try again later.');
-        // Modify this line to prevent the error from logging to console in tests
-        if (process.env.NODE_ENV !== 'test') {
-          console.error('Error fetching historical data:', error);
-        }
+        handleError('Failed to fetch historical data. Please try again later.', error);
       } finally {
         setIsHistoricalDataLoading(false);
       }
