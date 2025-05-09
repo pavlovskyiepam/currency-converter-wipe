@@ -11,6 +11,15 @@ import ResultSkeleton from './components/ResultSkeleton/ResultSkeleton';
 import ChartSkeleton from './components/ChartSkeleton/ChartSkeleton';
 import { predefinedCurrencies, getExchangeRate, getHistoricalRates } from './services/currency/currencyService';
 
+// Move CurrencyAwareResultSkeleton outside App to avoid inline definition
+const CurrencyAwareResultSkeleton = ({ fromCurrency, toCurrency, fee }) => (
+  <ResultSkeleton
+    fromCurrency={fromCurrency}
+    toCurrency={toCurrency}
+    fee={fee}
+  />
+);
+
 function App() {
   // State variables 
   const [currencies] = useState(predefinedCurrencies);
@@ -81,15 +90,6 @@ function App() {
     setToCurrency(fromCurrency);
   };
 
-  // Create a modified ResultSkeleton that accepts the current currencies
-  const CurrencyAwareResultSkeleton = () => (
-    <ResultSkeleton
-      fromCurrency={fromCurrency}
-      toCurrency={toCurrency}
-      fee={fee}
-    />
-  );
-
   return (
     <div className="App">
       <header className="App-header">
@@ -151,7 +151,11 @@ function App() {
           <div className="results-section">
             <div className="result-container">
               {isCurrentRateLoading ? (
-                <CurrencyAwareResultSkeleton />
+                <CurrencyAwareResultSkeleton
+                  fromCurrency={fromCurrency}
+                  toCurrency={toCurrency}
+                  fee={fee}
+                />
               ) : (
                 <ConversionResult
                   fromCurrency={fromCurrency}
